@@ -7,6 +7,8 @@ import com.tencent.wxcloudrun.config.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -39,6 +41,13 @@ public class WechatController {
 //
 //    }
 
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
     /**
      * 微信消息回调
      *
@@ -92,12 +101,9 @@ public class WechatController {
 
     private String postMsg(String msg) {
 //        该项目代码使用微信云托管,并且配置了开放接口服务,可以免于校验accessToken
-//        String appId = "";
-//        String appSecret = "";
-//        String tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appId +"appSecret" + appSecret;
-//        String accessToken = "";
-//        String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN" + accessToken;
 
+ //       String accessToken = getAsscesToken();
+//        String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken;
 //        String myId = "gh_95a9375e3a65";
         String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send";
         Map<String, String> map = JSONObject.parseObject(msg, Map.class);
@@ -105,7 +111,6 @@ public class WechatController {
         String fromUserName = map.get("FromUserName");
         String toUserName = map.get("ToUserName");
 
-        RestTemplate restTemplate = new RestTemplate();
         TextMsgEntity requst = new TextMsgEntity();
         requst.setMsgType("text");
         requst.setContent("重复你说的话：" + content);
@@ -113,6 +118,17 @@ public class WechatController {
         requst.setFromUser(toUserName);
         restTemplate.postForObject(url, requst, TextMsgEntity.class);
         return "SUCCESS";
+    }
+
+    private String getAsscesToken(){
+        String appId = "wx2bad489b5580a308";
+        String appSecret = "c41d4a72da0f26876ff4d440ba9f2115";
+        String tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appId +"&secret=" + appSecret;
+
+        String resultJson = restTemplate.getForObject(tokenUrl, String.class);
+        Map<String, String> map = JSONObject.parseObject(resultJson, Map.class);
+        String accessToken = map.get("access_token");
+        return accessToken;
     }
 
 }
