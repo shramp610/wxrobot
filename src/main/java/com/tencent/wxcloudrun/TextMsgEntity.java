@@ -1,14 +1,14 @@
 package com.tencent.wxcloudrun;
 
+import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
 
 @Data
 public class TextMsgEntity {
     String toUser ;
-    String fromUser;
-    String createTime;
-    String MsgType;
-    String Content;
+    String msgtype;
+    JSONObject text;
+    String content;
 }
 
 //<xml>

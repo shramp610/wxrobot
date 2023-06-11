@@ -102,21 +102,22 @@ public class WechatController {
     private String postMsg(String msg) {
 //        该项目代码使用微信云托管,并且配置了开放接口服务,可以免于校验accessToken
 
- //       String accessToken = getAsscesToken();
-//        String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken;
+        String accessToken = getAsscesToken();
+        String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken;
 //        String myId = "gh_95a9375e3a65";
-        String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send";
+//        String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send";
         Map<String, String> map = JSONObject.parseObject(msg, Map.class);
         String content = map.get("Content");
         String fromUserName = map.get("FromUserName");
-        String toUserName = map.get("ToUserName");
+
 
         TextMsgEntity requst = new TextMsgEntity();
-        requst.setMsgType("text");
-        requst.setContent("重复你说的话：" + content);
+        requst.setMsgtype("text");
+        JSONObject text = new JSONObject();
+        text.put("content","重复你说的话：" + content);
+        requst.setText(text);
         requst.setToUser(fromUserName);
-        requst.setFromUser(toUserName);
-        restTemplate.postForObject(url, requst, TextMsgEntity.class);
+        JSONObject jsonObject = restTemplate.postForObject(url, requst, JSONObject.class);
         return "SUCCESS";
     }
 
