@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.controller;
 
+import com.tencent.wxcloudrun.config.ApiResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,6 +56,17 @@ public class WechatController {
                 out.close();
             }
         }
+    }
+
+    /**
+     * 接收消息
+     *
+     * @param request
+     * @param response
+     */
+    @PostMapping("/message/post")
+    public ApiResponse getMsg(HttpServletRequest request, HttpServletResponse response) {
+        return ApiResponse.ok("收到消息");
     }
 
 
