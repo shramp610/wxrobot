@@ -82,6 +82,7 @@ public class WechatController {
             log.info("请求为：" + jsonString);
             postMsg(jsonString);
         } catch (IOException e) {
+            log.error("出错误了");
             throw new RuntimeException(e);
         }
 
