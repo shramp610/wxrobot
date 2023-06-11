@@ -14,19 +14,19 @@ public class WechatController {
 //
 //    @Autowired
 //    private WechatService wechatService;
-    /**
-     * 此接口用于微信验证
-     * @param signature
-     * @param timestamp
-     * @param nonce
-     * @param echostr
-     * @param response
-     */
-    @GetMapping
-    public  void callback(String signature, String timestamp, String nonce, String echostr, HttpServletResponse response){
-        PrintWriter printWriter = null;
-
-    }
+//    /**
+//     * 此接口用于微信验证
+//     * @param signature
+//     * @param timestamp
+//     * @param nonce
+//     * @param echostr
+//     * @param response
+//     */
+//    @GetMapping
+//    public  void callback(String signature, String timestamp, String nonce, String echostr, HttpServletResponse response){
+//        PrintWriter printWriter = null;
+//
+//    }
 
     /**
      * 微信消息回调
