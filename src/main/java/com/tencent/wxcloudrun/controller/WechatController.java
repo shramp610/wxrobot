@@ -1,14 +1,19 @@
 package com.tencent.wxcloudrun.controller;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @RestController
 public class WechatController {
 
@@ -66,6 +71,13 @@ public class WechatController {
      */
     @PostMapping("/message/post")
     public ApiResponse getMsg(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String jsonString = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
+            log.info("请求为："+ jsonString);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return ApiResponse.ok("收到消息");
     }
 
