@@ -117,7 +117,8 @@ public class WechatController {
         text.put("content","重复你说的话：" + content);
         requst.setText(text);
         requst.setToUser(fromUserName);
-        JSONObject jsonObject = restTemplate.postForObject(url, requst, JSONObject.class);
+        String jsonObject = restTemplate.postForObject(url, requst, String.class);
+        log.info("客服消息结果",jsonObject);
         return "SUCCESS";
     }
 
