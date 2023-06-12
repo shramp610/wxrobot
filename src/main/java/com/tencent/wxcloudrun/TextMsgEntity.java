@@ -1,6 +1,6 @@
 package com.tencent.wxcloudrun;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 @Data

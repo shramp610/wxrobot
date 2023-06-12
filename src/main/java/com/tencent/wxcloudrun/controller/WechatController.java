@@ -1,12 +1,13 @@
 package com.tencent.wxcloudrun.controller;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import com.tencent.wxcloudrun.TextMsgEntity;
+import com.tencent.wxcloudrun.TextRespEntity;
 import com.tencent.wxcloudrun.config.ApiResponse;
+import com.tencent.wxcloudrun.utils.XmlConverter;
+import com.tencent.wxcloudrun.utils.XmlToJsonConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Slf4j
@@ -43,6 +45,8 @@ public class WechatController {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private XmlConverter xmlConverter;
 
     @Bean
     public RestTemplate restTemplate() {
@@ -103,23 +107,19 @@ public class WechatController {
 //        该项目代码使用微信云托管,并且配置了开放接口服务,可以免于校验accessToken
 
         String accessToken = getAsscesToken();
-        String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken;
-//        String myId = "gh_95a9375e3a65";
-//        String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send";
-        Map<String, String> map = JSONObject.parseObject(msg, Map.class);
-        String content = map.get("Content");
-        String fromUserName = map.get("FromUserName");
+        // 因为客服消息接口无法授权，所以先注释
+//        postCustomerMsg(accessToken);
 
-
-        TextMsgEntity requst = new TextMsgEntity();
-        requst.setMsgtype("text");
-        JSONObject text = new JSONObject();
-        text.put("content","重复你说的话：" + content);
-        requst.setText(text);
-        requst.setToUser(fromUserName);
-        String jsonObject = restTemplate.postForObject(url, requst, String.class);
-        log.info("客服消息结果",jsonObject);
-        return "SUCCESS";
+        TextRespEntity textRespEntity = new TextRespEntity();
+        textRespEntity.setMsgType("text");
+        textRespEntity.setContent("测试内容");
+        textRespEntity.setFromUserName("321");
+        textRespEntity.setToUserName("123");
+        textRespEntity.setCreateTime(String.valueOf(LocalDateTime.now()));
+        String xml = msgToXml(textRespEntity);
+        String json = XmlToJsonConverter.convertXmlToJson(xml);
+        log.info(json);
+        return json;
     }
 
     private String getAsscesToken(){
@@ -133,4 +133,30 @@ public class WechatController {
         return accessToken;
     }
 
+    /**
+     * 异步发送客服消息
+     * @param accessToken
+     */
+    private void postCustomerMsg(String accessToken,String msg){
+        String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken;
+//        String myId = "gh_95a9375e3a65";
+//        String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send";
+        Map<String, String> map = JSONObject.parseObject(msg, Map.class);
+        String content = map.get("Content");
+        String fromUserName = map.get("FromUserName");
+        TextMsgEntity requst = new TextMsgEntity();
+        requst.setMsgtype("text");
+        JSONObject text = new JSONObject();
+        text.put("content","重复你说的话：" + content);
+        requst.setText(text);
+        requst.setToUser(fromUserName);
+        String jsonObject = restTemplate.postForObject(url, requst, String.class);
+        log.info("客服消息结果{}",jsonObject);
+    }
+
+    private String msgToXml(TextRespEntity textRespEntity){
+        String convertToXml = xmlConverter.convertToXml(textRespEntity);
+        log.info(convertToXml);
+        return convertToXml;
+    }
 }
