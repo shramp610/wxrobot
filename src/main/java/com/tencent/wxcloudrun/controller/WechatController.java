@@ -115,7 +115,7 @@ public class WechatController {
         textRespEntity.setContent("测试内容");
         textRespEntity.setFromUserName("321");
         textRespEntity.setToUserName("123");
-        textRespEntity.setCreateTime(String.valueOf(LocalDateTime.now()));
+        textRespEntity.setCreateTime(String.valueOf(System.currentTimeMillis()));
         String xml = msgToXml(textRespEntity);
         String json = XmlToJsonConverter.convertXmlToJson(xml);
         log.info(json);
