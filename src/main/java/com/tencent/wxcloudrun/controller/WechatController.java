@@ -112,10 +112,15 @@ public class WechatController {
 //        postCustomerMsg(accessToken);
 
         TextRespEntity textRespEntity = new TextRespEntity();
+        Map<String, String> map = JSONObject.parseObject(msg, Map.class);
+        String content = map.get("Content");
+        String fromUserName = map.get("FromUserName");
+        String toUserName = map.get("ToUserName");
+
         textRespEntity.setMsgType("text");
-        textRespEntity.setContent("测试内容");
-        textRespEntity.setFromUserName("321");
-        textRespEntity.setToUserName("123");
+        textRespEntity.setContent(content);
+        textRespEntity.setFromUserName(toUserName);
+        textRespEntity.setToUserName(fromUserName);
         textRespEntity.setCreateTime(String.valueOf(System.currentTimeMillis()));
         String xml = msgToXml(textRespEntity);
         String json = XmlToJsonConverter.convertXmlToJson(xml);
