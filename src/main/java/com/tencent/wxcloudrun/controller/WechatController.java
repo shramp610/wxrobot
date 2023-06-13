@@ -92,7 +92,6 @@ public class WechatController {
     public ApiResponse getMsg(HttpServletRequest request, HttpServletResponse response) {
         try {
             String jsonString = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
-
             log.info("请求为：" + jsonString);
             String postMsg = postMsg(jsonString);
             response.setHeader("Content-type", "application/json;charset=UTF-8");
