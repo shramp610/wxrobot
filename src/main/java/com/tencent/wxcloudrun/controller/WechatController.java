@@ -93,7 +93,8 @@ public class WechatController {
             String jsonString = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
 
             log.info("请求为：" + jsonString);
-            postMsg(jsonString);
+            String postMsg = postMsg(jsonString);
+            response.getWriter().write(postMsg);
         } catch (IOException e) {
             log.error("出错误了");
             throw new RuntimeException(e);
