@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -94,7 +95,10 @@ public class WechatController {
 
             log.info("请求为：" + jsonString);
             String postMsg = postMsg(jsonString);
-            response.getWriter().write(postMsg);
+            response.setHeader("Content-type", "application/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            ServletOutputStream outputStream = response.getOutputStream();
+            outputStream.print(postMsg);
         } catch (IOException e) {
             log.error("出错误了");
             throw new RuntimeException(e);
