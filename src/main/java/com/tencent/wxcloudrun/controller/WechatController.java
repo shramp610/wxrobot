@@ -89,7 +89,7 @@ public class WechatController {
      * @param response
      */
     @PostMapping("/message/post")
-    public ApiResponse getMsg(HttpServletRequest request, HttpServletResponse response) {
+    public void getMsg(HttpServletRequest request, HttpServletResponse response) {
         try {
             String jsonString = IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
             log.info("请求为：" + jsonString);
@@ -103,7 +103,7 @@ public class WechatController {
             throw new RuntimeException(e);
         }
 
-        return ApiResponse.ok("SUCCESS");
+//        return ApiResponse.ok("SUCCESS");
     }
 
 
