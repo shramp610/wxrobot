@@ -127,8 +127,8 @@ public class WechatController {
         textRespEntity.setCreateTime(String.valueOf(System.currentTimeMillis()));
         String xml = msgToXml(textRespEntity);
         String json = XmlToJsonConverter.convertXmlToJson(xml);
-        log.info(json);
-        return json;
+        log.info(xml);
+        return xml;
     }
 
     private String getAsscesToken(){
